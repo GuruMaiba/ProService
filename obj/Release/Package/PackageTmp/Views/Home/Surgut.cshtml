@@ -1,0 +1,292 @@
+﻿@model ICollection<ProService.Models.Device>
+@{
+    ViewBag.Title = "Pro Service Сургут | Профессиональный ремонт техники";
+    var iPads = Model.Where(d => !d.PhoneOrTablet);
+    var iPhones = Model.Where(d => d.PhoneOrTablet);
+}
+
+    <main class="main-block">
+        <section class="main-content">
+            <ul class="main-content__device-list">
+                <li>Apple</li>
+                <li>Смартфоны</li>
+                <li>Планшеты</li>
+                <li>Ноутбуки</li>
+            </ul><span class="main-content__img main-content__img-surgut" title="Pro Service. Профессиональный ремонт техники"></span>
+            <form id="FastConsultation" class="form main-content__form">
+                <div class="logo"><img class="logo-desktop" src="~/img/logo.png" alt="Pro Service. Профессиональный ремонт техники"><img class="logo-phone" src="~/img/logo-white.png" alt="Pro Service. Профессиональный ремонт техники" width="168px" height="96px"></div>
+                <div class="main-content__title-phone">
+                    <h1>Профессиональный ремонт техники</h1>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Контактный номер</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input type="hidden" name="Type" value="Consultation" />
+                    <button id="FastConsultationBtn" class="form__button" type="submit">Быстрая консультация</button>
+                </div>
+            </form>
+        </section>
+        <div class="special-offer">
+            <ul class="special-offer__list">
+                <li class="special-offer__item">
+                    <img class="special-offer__item_repair" src="~/img/repair.png" alt="Квалифирцированный ремонт">
+                    <div class="special-offer__item_text special-offer__item_text_first">
+                        <div>Среднее время ремонта</div>
+                        <div class="special-offer__item_time">20 минут</div>
+                    </div>
+                </li>
+                <li class="special-offer__item">
+                    <img class="special-offer__item_speed" src="~/img/speed.png" alt="Ремонт IPhone на выезде">
+                    <div class="special-offer__item_text special-offer__item_text_sec">
+                        <div>Прибытие мастера</div>
+                        <div class="special-offer__item_time">в течении 30 минут</div>
+                    </div>
+                </li>
+                <li class="special-offer__item">
+                    <img class="special-offer__item_option" src="~/img/option.png" alt="Оригинальные комплектующие">
+                    <div class="special-offer__item_text">
+                        <div>Оригинальные комплектующие</div>
+                        <div class="special-offer__item_time">с гарантией</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+    <div class="counter">
+        <div class="counter__title_top">Мы починили уже более</div>
+        <div class="counter-wrapper">
+            <ul class="flip-counter default" id="c1"></ul>
+        </div>
+        <div class="counter__title_bottom">устройств</div>
+    </div>
+    <div class="callback-buttons">
+        <ul class="callback-buttons__list" id="price">
+            <li><a class="callback-buttons__link" href="#" id="status-link">Узнать статус ремонта</a></li>
+            <li><a class="callback-buttons__link" href="/" id="courier-link">Вызвать курьера</a></li>
+            <li><a class="callback-buttons__link" href="/" id="write-link">Написать руководителю</a></li>
+        </ul>
+    </div>
+    <div class="price">
+        <div class="price__select-model">
+            <input type="radio" name="model" value="1" id="iPhone" hidden checked>
+            <label class="price__select-model_label" for="iPhone">iPhone</label>
+            <input type="radio" name="model" value="2" id="iPad" hidden>
+            <label class="price__select-model_label" for="iPad">iPad</label>
+            <input type="radio" name="model" value="3" id="other" hidden>
+            <label class="price__select-model_label js-body-opacity" for="other" id="other-device">Другая модель  устройства</label>
+            <div class="price__select-device">
+                <div class="price__select-device__list" id="iPhons">
+                    @if (iPhones.Count() > 0)
+                    {
+                        var i = 0;
+                        foreach (var iPhone in iPhones)
+                        {
+                            <input type="radio" name="phone" id="iPhone-@i" hidden="hidden" @if (i == 0) { <text> checked="checked" </text>  } data-position="@i" />
+                            <label class="price__select-device__label" for="iPhone-@i">@iPhone.Name</label>
+                            ++i;
+                        }
+
+                        <div class="highline"></div>
+
+                        i = 0;
+                        foreach (var iPhone in Model.Where(d => d.PhoneOrTablet))
+                        {
+                            <div class="price__list_wrapper @if (i == 0) {<text>activePage</text>}" data-page="@i">
+                                <ul class="price__list">
+                                    @if (iPhone.Price.Count > 0)
+                                    {
+                                        foreach (var price in iPhone.Price.OrderBy(p => p.Position))
+
+                                        {
+                                            if (price.Position % 2 != 0)
+                                            {
+                                                <li>
+                                                    <span class="price__list_service">@price.Name</span><span class="price__list_total">@price.Cost</span>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                                <ul class="price__list">
+                                    @if (iPhone.Price.Count > 0)
+                                    {
+                                        foreach (var price in iPhone.Price.OrderBy(p => p.Position))
+                                        {
+                                            if (price.Position % 2 == 0)
+                                            {
+                                                <li>
+                                                    <span class="price__list_service">@price.Name</span><span class="price__list_total">@price.Cost</span>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            ++i;
+                        }
+                    }
+                </div>
+                <div class="price__select-device__list" id="iPads">
+                    @if (iPads.Count() > 0)
+                    {
+                        var i = 0;
+                        foreach (var iPad in iPads)
+                        {
+                            <input type="radio" name="phone" id="iPad-@i" hidden="hidden" data-position="@i" />
+                            <label class="price__select-device__label" for="iPad-@i">@iPad.Name</label>
+                            ++i;
+                        }
+
+                        <div class="highline"></div>
+
+                        i = 0;
+                        foreach (var iPad in iPads)
+                        {
+                            <div class="price__list_wrapper" data-page="@i">
+                                <ul class="price__list">
+                                    @if (iPad.Price.Count > 0)
+                                    {
+                                        foreach (var price in iPad.Price.OrderBy(p => p.Position))
+                                        {
+                                            if (price.Position % 2 != 0)
+                                            {
+                                                <li>
+                                                    <span class="price__list_service">@price.Name</span><span class="price__list_total">@price.Cost</span>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                                <ul class="price__list">
+                                    @if (iPad.Price.Count > 0)
+                                    {
+                                        foreach (var price in iPad.Price.OrderBy(p => p.Position))
+                                        {
+                                            if (price.Position % 2 == 0)
+                                            {
+                                                <li>
+                                                    <span class="price__list_service">@price.Name</span><span class="price__list_total">@price.Cost</span>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            ++i;
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="price__footer">
+        <div class="price__footer_title">Не нашли своего устройства или неисправности?</div>
+        <div class="price__footer_subtitle">Позвоните нам по номеру (3462) 700-599 или <a class="send-order" href="#" data-order="order">оставьте заявку</a></div>
+    </div>
+    <div class="modal-open"></div>
+    <div class="access" id="access">
+        <div class="access__title">Аксессуары Apple</div><a class="access__view-catalog" href="~/Content/catalog.pdf" target="_blank">Посмотреть каталог</a>
+    </div>
+    <div class="advantages" id="advantages">
+        <ul class="advantages__list">
+            <li class="advantages__item"><span class="spritelogo advantages__equipment" title="Используем"></span><span class="advantages__item_top">Используем</span><span class="advantages__item_bottom"> профессинальное оборудование</span></li>
+            <li class="advantages__item"><span class="spritelogo advantages__visa" title="Беспроцентная  оплата"></span><span class="advantages__item_top">Беспроцентная  оплата</span><span class="advantages__item_bottom"> по карте на месте</span></li>
+            <li class="advantages__item"><span class="spritelogo advantages__new" title="Только новые"> </span><span class="advantages__item_top">Только новые</span><span class="advantages__item_bottom"> комплектующие</span></li>
+            <li class="advantages__item"><span class="spritelogo advantages__comfort" title="Уютное ожидание"></span><span class="advantages__item_top"> Уютное ожидание</span><span class="advantages__item_bottom">в нашем сервисе</span></li>
+            <li class="advantages__item"><span class="spritelogo advantages__gift" title="Приятные подарки"></span><span class="advantages__item_top">Подменный телефон</span><span class="advantages__item_bottom">на время ремонта</span></li>
+            <li class="advantages__item"><span class="spritelogo advantages__courier" title="Услуги курьера"></span><span class="advantages__item_top">Услуги курьера</span><span class="advantages__item_bottom"> выезд мастера</span></li>
+        </ul>
+    </div>
+    <div class="employees" id="employees">
+        <div class="employees__header">
+            <div class="employees__header_title">Сотрудники</div>
+            <div class="employees__header_subtitle">Наши сотрудники пошли обучение и являются высококвалифицированными мастерами своего дела</div>
+        </div>
+        <ul class="employees__list js-employees-carousel">
+            <li class="employees__item"><span class="employees__item_frame"><img class="employees__item_img" src="~/img/employees/1.png" alt="Наш сотрудник" width="279px"></span><span class="employees__name">Марк Кривец</span><span class="employees__experience">Опыт 2,5 года</span><span class="employees__fulfilled">Выполнил <span>4584 ремонтов</span></span></li>
+            <li class="employees__item"><span class="employees__item_frame"><img class="employees__item_img" src="~/img/employees/2.png" alt="Наш сотрудник" width="279px"></span><span class="employees__name">Артем Казаков</span><span class="employees__experience">Опыт 10 лет</span><span class="employees__fulfilled">Выполнил <span>24584 ремонтов</span></span></li>
+            <li class="employees__item"><span class="employees__item_frame"><img class="employees__item_img" src="~/img/employees/4.png" alt="Наш сотрудник" width="279px"></span><span class="employees__name">Радислав Нуртдинов</span><span class="employees__experience">Опыт 2,5 года</span><span class="employees__fulfilled">Выполнил <span>4584 ремонтов</span></span></li>
+            <li class="employees__item"><span class="employees__item_frame"><img class="employees__item_img" src="~/img/employees/3.png" alt="Наш сотрудник" width="279px"></span><span class="employees__name">Артем Смотрин</span><span class="employees__experience">Опыт 2,5 года</span><span class="employees__fulfilled">Выполнил <span>4584 ремонтов</span></span></li>
+        </ul>
+    </div>
+    <div class="reviews" id="reviews">
+        <div class="reviews__title"> <a class="reviews__link" href="/" data-reviews="reviews">Оставьте отзыв </a>о нас, что бы улучшить качестов нашей работы</div>
+        <ul class="reviews__list js-carousel">
+            <li class="reviews__item">
+                <span class="reviews__img_wrapp"><img src="~/img/reviews-1.jpg" alt="Отзывы о нас" width="190px" height="188px"></span><span class="reviews__name">Гулечка Яхина<a class="reviews__name__link" href="https://vk.com/id14688590" target="_blank" title="Посетить страницу"></a></span><span class="reviews__text">Я хочу выразить огромную благодарность вашей команде Proservice_one, которая восстановила мой телефон, не ожидала что так быстро и профессионально выполнят свою работу!!!! Спасибо большое!!!всем рекомендуююю  </span>
+                <!--a(href="/").reviews__link_read-more Читать полностью-->
+            </li>
+            <li class="reviews__item">
+                <span class="reviews__img_wrapp"><img src="~/img/reviews-3.jpg" alt="Отзывы о нас" width="190px" height="188px"></span><span class="reviews__name">jalovn<a class="reviews__soc__link-insta" href="https://www.instagram.com/p/BUHanR3BMSS/" target="_blank" title="Посетить страницу"></a></span><span class="reviews__text">Вроде бы все хорошо, а может не хорошо не знаю это просто фальшивый отзыв. Я  даже не оставлял на самом то деле</span>
+                <!--a(href="/").reviews__link_read-more Читать полностью-->
+            </li>
+            <li class="reviews__item">
+                <span class="reviews__img_wrapp"><img src="~/img/reviews-4.jpg" alt="Отзывы о нас" width="190px" height="188px"></span><span class="reviews__name">svyatie_peshky<a class="reviews__soc__link-insta" href="https://www.instagram.com/p/BRtDPlVjuS-/" target="_blank" title="Посетить страницу"></a></span><span class="reviews__text">
+                    Очень меня радует, когда попадаешь к профессионалам своего дела🖖 и это касается любой сферы деятельности и услуг!
+                    Для меня ремонт телефона ассоциировался всегда с неприятными ощущениями... и вот сейчас, мне посоветовали где можно полечить мой Айфон и , честно, я остался очень доволен.
+                    После многочисленных купаний и паданий в Тае стал плохо работать динамик. Мне бесплатно разобрали, почистили и отдали его за пол часа. Не став впаривать новый динамик, хотя могли😑 . .
+                    Теперь я точно знаю кому в Сургуте можно доверить свои гаджеты🙌
+                </span>
+                <!--a(href="/").reviews__link_read-more Читать полностью    -->
+            </li>
+        </ul>
+    </div>
+    <div class="hotdeals">
+        <div class="hotdeals__title">Горячие предложения</div>
+        <div class="hotdeals__date">21 апреля, Четверг</div>
+        <ul class="hotdeals__list">
+            <li class="hotdeals__item"><img src="~/img/hot-glass.png" alt="При замене экрана.Защитное стекло для вашего IPhone в подарок" width="260px" height="433px"><span class="hotdeals__item_title">При замене экрана</span><span class="hotdeals__item_text">Защитное стекло для вашего IPhone в подарок</span></li>
+            <li class="hotdeals__item"><img src="~/img/chehol.png" alt="Оригинальный чехол В подарок при ремонте от 5500" width="380px" height="448px"><span class="hotdeals__item_title">Оригинальный чехол</span><span class="hotdeals__item_text">В подарок при ремонте от 5500</span></li>
+            <li class="hotdeals__item"><img src="~/img/discount-insta.png" alt="Скидка 10%. За пост в Instagram"><span class="hotdeals__item_title">Скидка 10%</span><span class="hotdeals__item_text">За пост в Instagram</span></li>
+        </ul>
+    </div>
+    <div class="callback">
+        <div class="callback__title">Диагностика в Pro Service – <span>бесплатно</span></div>
+        <div class="callback__subtitle">Запишитесь на бесплатную диагностику вашего девайса</div>
+        <div class="callback__wrapp callback-buttom">
+            <img class="callback__img" src="~/img/phone2.png" alt="Запишитесь на бесплатную диагностику вашего девайса" width="550px" height="400px">
+            <form id="Diagnostic" class="form">
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Контактный номер</label><span class="highlight"></span>
+                </div>
+                <div class="form__group form__wrap">
+                    <input type="hidden" name="Type" value="Diagnostic" />
+                    <button id="DiagnosticBtn" class="form__button" type="submit">Записаться</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="coords">
+        <div class="coords__title">Мы ждем вас в гости</div>
+        <div class="coords__subtitle">Пока мастер выполняет  ремонт вашего устройства, мы дадим вам IPad и угостим вкусными конфетками.</div>
+        <div class="coords__map" id="map"></div>
+        <ul class="coords__list">
+            <li class="coords__item geo">пр-т Мира д. 5, ТЦ “Никольский”, цокольный этаж</li>
+            <li class="coords__item phone">+7 (3462) 700 - 599</li>
+            <li class="coords__item messenger">+7 (952) 718-05-99</li>
+            <li class="coords__item time">10:00 - 20:30</li>
+            <div class="social"><a class="social__link spritelogo social__link_vk" href="https://vk.com/proservice_one" title="Вконтакте"></a><a class="social__link spritelogo social__link_insta" href="https://www.instagram.com/proservice.one/" title="Инстаграмм"> </a></div>
+        </ul>
+    </div>
+    <div class="footer" id="footer">
+        <div class="footer-left"><span class="footer__text">ООО «Торговый дом-сервис»</span><a class="footer__download-docs" href="~/Content/kp.doc" download>Скачать карточку предприятия</a></div>
+        <div class="footer-right">
+            <div class="created-by"><img src="~/img/unk.png" alt="Сайт разработан Студией UNK"></div>
+            <div class="created-by__text"><span>Сайт разработан <a href="http://unk.im/">Студией UNK</a></span><a class="created-by__more" href="http://unk.im/">Прочитать о сайте</a></div>
+        </div>
+    </div>
+
+@section Scripts {
+    <script src="~/Scripts/map.js"></script>
+}

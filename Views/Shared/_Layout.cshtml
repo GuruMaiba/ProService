@@ -1,0 +1,277 @@
+﻿@{ 
+    var address = "г. Сургут, пр-кт Мира 5.";
+    var phone1 = "+7 (3462) 700-599";
+    var phone2 = "+7 (952) 718-05-99";
+    var time = "С 10:00 до 20:30";
+    if (ViewBag.city == "Moscow")
+    {
+        address = "г. Москва";
+        phone1 = "";
+        phone2 = "+7 (929) 200-20-30";
+        time = "Круглосуточно";
+    }
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/Content/main.css">
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <ul class="nav__list">
+                <li class="nav__item">
+                    <span class="nav__item__geo-logo"></span><a class="nav__link nav__link_geo" href="#" id="geo-pos">@address</a>
+                    <ul class="geo-list">
+                        <li> <span class="geo-list__surgut-logo"></span><a href="/Surgut">Сургут</a></li>
+                        <li> <span class="geo-list__moscow-logo"></span><a href="/Moscow">Москва</a></li>
+                    </ul>
+                </li>
+                <li class="nav__item"><span class="nav__item__phone-logo"></span>@if(phone1 != ""){<span class="nav__link" id="first-num">@phone1</span>}</li>
+                <li class="nav__item"><span class="nav__item__whatsapp-logo"></span><span class="nav__item__telegram-logo"> </span><span class="nav__item__viber-logo"></span><span class="nav__link" id="sec-num">@phone2</span></li>
+                <li class="nav__item"><span class="nav__item__time-logo"></span><span class="nav__link" id="time">@time</span></li>
+            </ul>
+        </nav>
+        <div class="burger-nav">
+            <div id="burger-container">
+                <div id="burger"><span>&nbsp;</span><span>&nbsp;</span></div>
+            </div>
+            <ul class="burger-nav__list">
+                <li class="burger-nav__item"><a class="burger-nav__link" href="#" id="nav__status">Статус ремонта</a></li>
+                <li class="burger-nav__item"><a class="burger-nav__link" href="#price">Стоимость</a></li>
+                <li class="burger-nav__item"><a class="burger-nav__link" href="#access">Аксесуары</a></li>
+                <li class="burger-nav__item"><a class="burger-nav__link" href="#employees">О нас в лицах</a></li>
+                <li class="burger-nav__item"><a class="burger-nav__link" href="#reviews">Отзывы</a></li>
+                <li class="burger-nav__item"><a class="burger-nav__link" href="#footer">Адрес и контакты</a></li>
+            </ul>
+        </div>
+    </header>
+    @RenderBody()
+    <div class="modal modal__status" id="status-repairs">
+        <div class="modal__header">
+            <div class="modal__title">Узнать статус ремонта</div><button type="button" class="modal__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal__status_wrap"><div id="remonline-widget" data-key="6f3c3ff0509275973162eb564232c3db"></div></div>
+    </div>
+    <div class="modal" id="call-courier">
+        <div class="modal__header">
+            <div class="modal__title">Вызвать курьера</div><button type="button" class="modal__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="Courer" class="form">
+            <div class="form__col">
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Контакный телефон</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="AddressEmailDevice" required>
+                    <label class="form__label" for="name">Адрес</label><span class="highlight"></span>
+                </div>
+            </div>
+            <div class="form__col-2">
+                <div class="form__group">
+                    <textarea class="form__textarea" type="text" name="Text" placeholder="Текст сообщения" required></textarea>
+                </div>
+                <div class="form__group">
+                    <input type="hidden" name="Type" value="Courer" />
+                    <button id="CourerBtn" class="form__button" type="submit">Вызвать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal" id="write-manager">
+        <div class="modal__header">
+            <div class="modal__title">Написать руководителю</div><button type="button" class="modal__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="Manager" class="form">
+            <div class="form__col">
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Контактный телефон</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="AddressEmailDevice" required>
+                    <label class="form__label" for="name">E-mail</label>
+                </div>
+            </div>
+            <div class="form__col-2">
+                <div class="form__group">
+                    <textarea class="form__textarea" type="text" name="Text" placeholder="Текст сообщения" required></textarea>
+                </div>
+                <div class="form__group">
+                    <input type="hidden" name="Type" value="Manager" />
+                    <button id="ManagerBtn" class="form__button" type="submit">Отправить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal" id="modal-other-device">
+        <div class="modal__header">
+            <div class="modal__title">Другая модель устройства</div><button type="button" class="modal__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="OtherDevice" class="form">
+            <div class="form__col">
+                <div class="form__group">
+                    <input class="form__input" type="text" name="AddressEmailDevice" required>
+                    <label class="form__label" for="name">Ваша устройство</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Контактный номер</label><span class="highlight"></span>
+                </div>
+            </div>
+            <div class="form__col-2">
+                <div class="form__group">
+                    <textarea class="form__textarea" type="text" name="Text" placeholder="Описание проблемы" required></textarea>
+                </div>
+                <div class="form__group">
+                    <input type="hidden" name="Type" value="OtherDevice" />
+                    <button class="form__button" id="OtherDeviceBtn" type="submit">Быстрая консультация</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal" id="send-order">
+        <div class="modal__header">
+            <div class="modal__title">Оставить заявку</div><button type="button" class="modal__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="SubmitApp" class="form">
+            <div class="form__col">
+                <div class="form__group">
+                    <input class="form__input" type="text" name="AddressEmailDevice" required>
+                    <label class="form__label" for="name">Ваше устройство</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Контактный номер</label><span class="highlight"></span>
+                </div>
+            </div>
+            <div class="form__col-2">
+                <div class="form__group">
+                    <textarea class="form__textarea" type="text" name="Text" placeholder="Описание проблемы" required></textarea>
+                </div>
+                <div class="form__group">
+                    <input type="hidden" name="Type" value="SubmitApp" />
+                    <button id="SubmitAppBtn" class="form__button" type="submit">Отправить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal" id="send-reviews">
+        <div class="modal__header">
+            <div class="modal__title">Оставить отзыв</div><button type="button" class="modal__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="Reviews" class="form form__reviews">
+            <div class="form__col">
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Name" required>
+                    <label class="form__label" for="name">Имя</label><span class="highlight"></span>
+                </div>
+                <div class="form__group">
+                    <input class="form__input" type="text" name="Phone" required>
+                    <label class="form__label" for="name">Ссылка на соц.сети</label><span class="highlight"></span>
+                </div>
+            </div>
+            <div class="form__col-2">
+                <div class="form__group">
+                    <textarea class="form__textarea" type="text" name="Text" placeholder="Текст отзыва" required></textarea>
+                </div>
+                <div class="form__group">
+                    <input type="hidden" name="Type" value="Reviews" />
+                    <button id="ReviewsBtn" class="form__button" type="submit">Отправить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-backdrop"></div>
+</body>
+</html>
+<script>
+    (function () {
+        var script = document.createElement('script');
+        script.type = 'text/javascript'; script.async = true;
+        script.src = '//remonline.ru/static/js/remonline-widget.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+    })();
+</script>
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+<script src="~/Scripts/slick.min.js"> </script>
+<script src="~/Scripts/flipcounter.js"></script>
+<script src="~/Scripts/main.js"></script>
+<script src="~/Scripts/validation.js"></script>
+@RenderSection("Scripts")
+<script>
+    var city = "@ViewBag.city";
+
+    $(document).ready(function () {
+        $("#FastConsultationBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+
+        $("#CourerBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+
+        $("#ManagerBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+
+        $("#OtherDeviceBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+
+        $("#DiagnosticBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+
+        $("#ReviewsBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+
+        $("#SubmitAppBtn").click(function (e) {
+            e.preventDefault();
+            ajaxModal($(this).attr("id"));
+        });
+    });
+
+    function ajaxModal(idBtn) {
+        var form = $("#" + idBtn.slice(0, -3)).serialize() + '&City=' + city;
+        $.ajax({
+            url: "/Modal/Home",
+            type: "POST",
+            data: form,
+            success: function () {
+                $(".modal").css("display", "none");
+                $(".modal-backdrop").css("display", "none");
+                $("body").removeClass("modal-open");
+            }
+        });
+    }
+</script>

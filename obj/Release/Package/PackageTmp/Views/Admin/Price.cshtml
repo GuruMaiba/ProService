@@ -1,0 +1,217 @@
+﻿@model ICollection<ProService.Models.Device>
+@{
+    Layout = null;
+    var iPads = Model.Where(d => !d.PhoneOrTablet);
+    var iPhones = Model.Where(d => d.PhoneOrTablet);
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Pro Service | Профессиональный ремонт техники </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @Styles.Render("~/Content/main.css")
+</head>
+<body>
+    <div class="price">
+        <div class="price__select-model">
+            <input type="radio" name="model" value="1" id="iPhone" hidden checked>
+            <label class="price__select-model_label" for="iPhone">iPhone</label>
+            <input type="radio" name="model" value="2" id="iPad" hidden>
+            <label class="price__select-model_label" for="iPad">iPad</label>
+            @*<input type="radio" name="model" value="3" id="other" hidden>*@
+            <label class="price__select-model_label js-body-opacity" for="other" id="other-device">Другая модель  устройства</label>
+            <div class="add-device">
+                <input class="form__input_admin" type="text" name="AddDevice" placeholder="Ввести вид устройства">
+                <button class="addDevice button__admin">Добавить</button>
+            </div>
+            <div class="price__select-device">
+                <div class="price__select-device__list price__select-device__list_admin" id="iPhons">
+                    @if (iPhones.Count() > 0)
+                    {
+                        var i = 0;
+                        foreach (var iPhone in iPhones)
+                        {
+                            <input type="radio" name="phone" id="iPhone-@i" hidden="hidden" @if (i == 0) {<text>checked= "checked"</text>} data-position="@i" value="@iPhone.Id" />
+                            <label class="price__select-device__label price__select-device__label_admin" for="iPhone-@i">@iPhone.Name<button type="button" class="close" data-id="@iPhone.Id" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></label>
+                            ++i;
+                        }
+
+                        <div class="highline"></div>
+
+                        i = 0;
+                        foreach (var iPhone in Model.Where(d => d.PhoneOrTablet))
+                        {
+                            <div class="price__list_wrapper @if (i == 0) {<text>activePage</text>}" data-page="@i">
+                                <ul class="price__list price__list_admin">
+                                    @if (iPhone.Price.Count > 0)
+                                    {
+                                        foreach (var price in iPhone.Price.OrderBy(p => p.Position))
+                                        {
+                                            <li>
+                                                <span class="price__list_service">@price.Name</span><span class="price__list_total">@price.Cost</span>
+                                                <button class="button__admin deleteServece" id="delete-@price.Id">Удалить</button>
+                                                <button class="button__admin addPosition" id="add-@price.Position">Внизу</button>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <div class="add-service">
+                                                <form action="/Admin/AddPrice" class="form__admin" method="post">
+                                                    <input type="hidden" name="Id" value="@iPhone.Id">
+                                                    <input class="form__input_admin" type="text" name="Name" placeholder="Ввести услугу">
+                                                    <input class="form__input_admin" type="text" name="Cost" placeholder="Ввести цену">
+                                                    <input type="hidden" name="Position" value="">
+                                                    <button class="button__admin" type='submit'>Добавить</button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            ++i;
+                        }
+                    }
+                </div>
+                <div class="price__select-device__list price__select-device__list_admin" id="iPads">
+                    @if (iPads.Count() > 0)
+                    {
+                        var i = 0;
+                        foreach (var iPad in iPads)
+                        {
+                                <input type="radio" name="phone" id="iPad-@i" hidden="hidden" data-position="@i" value="@iPad.Id" />
+                                <label class="price__select-device__label price__select-device__label_admin" for="iPad-@i">@iPad.Name <button type="button" class="close" data-id="@iPad.Id" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></label>
+                            ++i;
+                        }
+
+                        <div class="highline"></div>
+
+                        i = 0;
+                        foreach (var iPad in iPads)
+                        {
+                            <div class="price__list_wrapper" data-page="@i">
+                                <ul class="price__list price__list_admin">
+                                    @if (iPad.Price.Count > 0)
+                                    {
+                                        foreach (var price in iPad.Price.OrderBy(p => p.Position))
+                                        {
+                                            <li>
+                                                <span class="price__list_service">@price.Name</span><span class="price__list_total">@price.Cost</span>
+                                                <button class="button__admin deleteServece" id="delete-@price.Id">Удалить</button>
+                                                <button class="button__admin addPosition" id="add-@price.Position">Внизу</button>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <div class="add-service">
+                                                <form action="/Admin/AddPrice" class="form__admin" method="post">
+                                                    <input type="hidden" name="Id" value="@iPad.Id">
+                                                    <input class="form__input_admin" type="text" name="Name" placeholder="Ввести услугу">
+                                                    <input class="form__input_admin" type="text" name="Cost" placeholder="Ввести цену">
+                                                    <input type="hidden" name="Position" value="">
+                                                    <button class="button__admin" type='submit'>Добавить</button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            ++i;
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+<script src="~/Scripts/main.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".addDevice").click(function () {
+            var Name = $("input[name=AddDevice]").val();
+            var Type = "";
+            if ($("input[name=model]:checked").val() == "1") {
+                Type = "phone";
+            } else {
+                Type = "tablet";
+            }
+            if (Name != "") {
+                $.ajax({
+                    url: "/AddDevice/Admin",
+                    type: "POST",
+                    data: {
+                        Name: Name,
+                        Type: Type
+                    },
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        $(".close").click(function () {
+            if (confirm("Вы уверены что хотите удалить это устройство?")) {
+                var id = $(this).data("id");
+                if (id != "") {
+                    $.ajax({
+                        url: "/DeleteDevice/Admin",
+                        type: "POST",
+                        data: {
+                            Id: id
+                        },
+                        success: function () {
+                            location.reload();
+                        }
+                    });
+                }
+            }
+        });
+
+        $(".deleteServece").click(function () {
+            if (confirm("Вы уверены что хотите удалить эту услугу?")) {
+                var id = $(this).attr("id");
+                id = id.substring(id.indexOf("-") + 1);
+                if (id != "") {
+                    $.ajax({
+                        url: "/DeletePrice/Admin",
+                        type: "POST",
+                        data: {
+                            Id: id
+                        },
+                        success: function () {
+                            location.reload();
+                        }
+                    });
+                }
+            }
+        });
+
+        $(".addPosition").click(function () {
+            var id = $("input[name=phone]:checked").val();
+            var pos = $(this).attr("id");
+            pos = pos.substring(pos.indexOf("-") + 1);
+
+            var form = "<div class=\"add-service\">"
+		                + "<form class=\"form__admin\" action=\"/Admin/AddPrice\" method=\"post\">"
+		                    + "<input type=\"hidden\" name=\"Id\"  value='"+id+"'>"
+		                    + "<input type=\"text\" name=\"Name\" class=\"form__input_admin\" placeholder=\"Ввести услугу\">"
+		                    + "<input type=\"text\" name=\"Cost\" class=\"form__input_admin\" placeholder=\"Ввести цену\">"
+		                    + "<input type=\"hidden\" name=\"Position\" value='"+pos+"'>"
+		                    + "<button type='submit' class=\"button__admin\">Добавить</button>"
+		                + "</form>"
+		            + "</div>";
+            $(this).parent().after(form);
+        });
+
+    });
+</script>

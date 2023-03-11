@@ -1,0 +1,58 @@
+.sprite {
+    background-image: url(spritesheet.png);
+    background-repeat: no-repeat;
+    display: block;
+}
+
+
+
+
+
+.sprite-clock 
+
+
+
+.sprite-gear-option {
+    width: 50px;
+    height: 50px;
+    background-position: -172px -5px;
+}
+
+
+
+
+
+
+
+
+
+.sprite-map-pointer {
+    width: 21px;
+    height: 32px;
+    background-position: -400px -5px;
+}
+
+
+
+
+
+.sprite-screwdriver {
+    width: 57px;
+    height: 71px;
+    background-position: -562px -5px;
+}
+
+
+
+.sprite-sports-car-top-down-silhouette {
+    width: 108px;
+    height: 30px;
+    background-position: -629px -5px;
+}
+
+
+
+
+
+
+
